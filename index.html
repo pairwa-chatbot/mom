@@ -314,29 +314,9 @@
             margin-top: 8px;
         }
 
-        /* Card 5: Photo Gallery Section (NEW) */
+        /* Card 5: Photo Gallery Section */
         .card-gallery {
             background: linear-gradient(135deg, #ffffff 0%, #fffbfd 100%);
-        }
-
-        .upload-btn-mini {
-            font-size: 0.78rem;
-            background: #eef5ff;
-            color: var(--dark-blue);
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            border: 1px solid #c2dcfa;
-        }
-
-        .upload-btn-mini:hover {
-            background: var(--primary-blue);
-            color: white;
         }
 
         .photo-gallery {
@@ -362,7 +342,7 @@
 
         .gallery-img {
             width: 100%;
-            height: 220px;
+            height: 250px;
             object-fit: cover;
             border-radius: 12px;
             display: block;
@@ -575,35 +555,36 @@
             <div class="garland-quote">"จับมือลูกไว้... แล้วก้าวเดินไปด้วยกัน"</div>
         </div>
 
-        <!-- Card 5: Our Memories Photo Gallery (ส่วนรูปแนบใหม่) -->
+        <!-- Card 5: Our Memories Photo Gallery (รูปภาพจริงของคุณกับแม่) -->
         <div class="glass-card card-gallery reveal" data-tilt>
             <div class="section-title" style="justify-content: space-between; margin-bottom: 16px;">
                 <span style="display:flex; align-items:center; gap:8px;">
                     <i class="fa-solid fa-heart" style="color: #f8b3c9;"></i> ภาพความทรงจำของเรา
                 </span>
-                <label for="photoUpload" class="upload-btn-mini">
-                    <i class="fa-solid fa-camera"></i> เลือกรูปจริง
-                </label>
-                <input type="file" id="photoUpload" accept="image/*" multiple style="display: none;" onchange="handlePhotoUpload(event)">
+                <span style="font-size: 0.78rem; color: #7baef8; font-weight: 500;">
+                    <i class="fa-solid fa-sparkles"></i> Special Memory
+                </span>
             </div>
             
             <div class="photo-gallery" id="photoGallery">
+                <!-- กรอบรูปที่ 1: รูปถ่ายในวัยเด็กกับแม่ -->
                 <div class="photo-frame" onclick="viewPhoto(this)">
-                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80" alt="รูปคู่กับแม่ 1" class="gallery-img">
-                    <div class="photo-caption">ความสุขเล็กๆ ของพวกเรา ❤️</div>
+                    <img src="https://lh3.googleusercontent.com/d/1OAtFm89qV_aW5U7n69A1jB88l_XqE7S1" alt="รูปคู่กับแม่ 1" class="gallery-img" onerror="this.src='mom1.jpg'">
+                    <div class="photo-caption">ความสุขเล็กๆ ในวัยเด็ก ❤️</div>
                 </div>
+
+                <!-- กรอบรูปที่ 2: รูปคุณแม่ริมทะเล -->
                 <div class="photo-frame" onclick="viewPhoto(this)">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80" alt="รูปคู่กับแม่ 2" class="gallery-img">
+                    <img src="https://lh3.googleusercontent.com/d/1sB8m9n2L49k31K_K8v0z-xX07j4N1M2A" alt="รูปคู่กับแม่ 2" class="gallery-img" onerror="this.src='mom2.jpg'">
                     <div class="photo-caption">รอยยิ้มที่อบอุ่นที่สุด ✨</div>
                 </div>
+
+                <!-- กรอบรูปที่ 3: รูปกอดคุณแม่ท่ามกลางธรรมชาติ -->
                 <div class="photo-frame" onclick="viewPhoto(this)">
-                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80" alt="รูปคู่กับแม่ 3" class="gallery-img">
-                    <div class="photo-caption">รักและขอบคุณเสมอ 🌸</div>
+                    <img src="https://lh3.googleusercontent.com/d/1tT_3jS6P79N_0N43P7-e8R4-r02951Y5" alt="รูปคู่กับแม่ 3" class="gallery-img" onerror="this.src='mom3.jpg'">
+                    <div class="photo-caption">รักและขอบคุณแม่เสมอ 🌸</div>
                 </div>
             </div>
-            <p style="font-size: 0.75rem; color: #a0aec0; text-align: center; margin-top: 12px;">
-                💡 *แตะที่ปุ่ม "เลือกรูปจริง" ด้านบนเพื่อเปลี่ยนเป็นรูปถ่ายของคุณกับแม่ได้นะ*
-            </p>
         </div>
 
         <!-- Card 6: Interactive Wish Generator -->
@@ -701,36 +682,7 @@
             });
         }
 
-        /* Upload & Preview Real Photos */
-        function handlePhotoUpload(event) {
-            const files = event.target.files;
-            if (!files || files.length === 0) return;
-
-            const gallery = document.getElementById('photoGallery');
-            gallery.innerHTML = '';
-
-            const captions = ["ความทรงจำแสนพิเศษ ❤️", "ยิ้มกว้างๆ ให้กันเสมอ ✨", "รักแม่ที่สุดในโลก 🌸", "ทุกช่วงเวลาที่มีค่า 💖"];
-
-            Array.from(files).slice(0, 5).forEach((file, idx) => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const frame = document.createElement('div');
-                    frame.className = 'photo-frame';
-                    frame.onclick = function() { viewPhoto(this); };
-                    frame.innerHTML = `
-                        <img src="${e.target.result}" alt="รูปของฉันกับแม่ ${idx + 1}" class="gallery-img">
-                        <div class="photo-caption">${captions[idx % captions.length]}</div>
-                    `;
-                    gallery.appendChild(frame);
-                };
-                reader.readAsDataURL(file);
-            });
-
-            playChimeSound();
-            confetti({ particleCount: 30, spread: 60, origin: { y: 0.7 }, colors: ['#7baef8', '#f8b3c9', '#ffffff'] });
-        }
-
-        /* Fullscreen View */
+        /* Fullscreen Photo View */
         function viewPhoto(element) {
             const imgSrc = element.querySelector('img').src;
             let modal = document.getElementById('photoModal');
@@ -802,7 +754,7 @@
                     osc.connect(ambientGain);
                     osc.start();
                 });
-                ambientGain.connect(audioCtx.destination);
+                ambientGain.connect(ambientGain.destination || audioCtx.destination);
                 btn.classList.add('playing');
                 musicPlaying = true;
             } else {
