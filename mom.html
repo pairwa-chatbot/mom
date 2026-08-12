@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Mother's Day | การ์ดวันแม่สุดพิเศษ</title>
+    <!-- Google Fonts: Prompt & Kanit & Mali -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Mali:wght@500;600;700&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #f0f4f9;
+            --card-bg: #ffffff;
+            --primary-blue: #7baef8;
+            --soft-blue: #e8f1fd;
+            --dark-blue: #3b6ba5;
+            --text-color: #4a5568;
+            --heading-color: #2b3a4a;
+            --accent-pink: #f8b3c9;
+            --soft-gold: #f6e05e;
+            --shadow: 0 10px 30px rgba(123, 174, 248, 0.15);
+            --shadow-hover: 0 20px 40px rgba(123, 174, 248, 0.25);
+        }
+
+        /* Smooth Scroll globally */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Prompt', 'Kanit', sans-serif;
+            background: linear-gradient(135deg, #eef4fc 0%, #f7f9fc 50%, #ebf2fb 100%);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 30px 15px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Falling Petals Canvas */
+        #petalCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 99;
+        }
+
+        /* App Container */
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 32px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Reveal on Scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(35px) scale(0.97);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Base Card Style */
+        .glass-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 28px 22px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+            border: 1px solid #f0f4f8;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Card 1: Tree Hero */
+        .card-hero {
+            text-align: center;
+            background: linear-gradient(180deg, #ffffff 0%, #f4f8fe 100%);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: var(--soft-blue);
+            color: var(--dark-blue);
+            font-size: 0.78rem;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .hero-title {
+            font-family: 'Kanit', sans-serif;
+            font-size: 1.6rem;
+            color: var(--dark-blue);
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .tree-wrapper {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            cursor: pointer;
+        }
+
+        .tree-heart {
+            width: 140px;
+            height: 140px;
+            background: radial-gradient(circle at 30% 30%, #a2ccfb, #5c9ce6 70%);
+            mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+            -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+            mask-size: contain;
+            -webkit-mask-size: contain;
+            mask-repeat: no-repeat;
+            -webkit-mask-repeat: no-repeat;
+            position: absolute;
+            top: 10px;
+            animation: pulseTree 3s infinite ease-in-out;
+            filter: drop-shadow(0 6px 12px rgba(92, 156, 230, 0.3));
+        }
+
+        .tree-trunk {
+            width: 16px;
+            height: 75px;
+            background: linear-gradient(180deg, #4b7bb2 0%, #2f5685 100%);
+            border-radius: 8px;
+            z-index: 1;
+        }
+
+        .interactive-hint {
+            font-size: 0.75rem;
+            color: #8a99ad;
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        /* Card 2: Letter Card */
+        .card-letter {
+            background: linear-gradient(135deg, #ffffff 0%, #fffdfa 100%);
+            border-left: 5px solid var(--primary-blue);
+        }
+
+        .letter-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .letter-icon {
+            width: 36px;
+            height: 36px;
+            background: #eef5ff;
+            color: var(--dark-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .letter-title {
+            font-family: 'Mali', cursive;
+            font-size: 1.25rem;
+            color: var(--heading-color);
+            font-weight: 700;
+        }
+
+        .letter-body {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: #5a6878;
+            text-align: justify;
+            margin-bottom: 18px;
+        }
+
+        .letter-footer {
+            text-align: right;
+            font-family: 'Mali', cursive;
+            font-size: 0.95rem;
+            color: var(--dark-blue);
+            font-weight: 600;
+        }
+
+        /* Card 3: Memory Grid */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            padding: 0 4px;
+        }
+
+        .section-title {
+            font-size: 1.05rem;
+            color: var(--heading-color);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .memory-card {
+            background: white;
+            border-radius: 16px;
+            padding: 12px 8px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .memory-card:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 12px 20px rgba(123, 174, 248, 0.2);
+            border-color: var(--primary-blue);
+        }
+
+        .memory-img-wrapper {
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(135deg, #eaf2ff 0%, #fce4ec 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .memory-caption {
+            font-size: 0.78rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Card 4: Garland Card */
+        .card-garland {
+            text-align: center;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+        }
+
+        .garland-wrapper {
+            position: relative;
+            display: inline-block;
+            margin: 15px 0;
+            cursor: pointer;
+        }
+
+        .garland-icon {
+            font-size: 4.2rem;
+            display: inline-block;
+            animation: floatGarland 3.5s ease-in-out infinite;
+            filter: drop-shadow(0 8px 16px rgba(123, 174, 248, 0.3));
+        }
+
+        .garland-quote {
+            font-family: 'Mali', cursive;
+            font-size: 0.95rem;
+            color: var(--dark-blue);
+            margin-top: 8px;
+        }
+
+        /* Card 5: Photo Gallery Section (NEW) */
+        .card-gallery {
+            background: linear-gradient(135deg, #ffffff 0%, #fffbfd 100%);
+        }
+
+        .upload-btn-mini {
+            font-size: 0.78rem;
+            background: #eef5ff;
+            color: var(--dark-blue);
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid #c2dcfa;
+        }
+
+        .upload-btn-mini:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .photo-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .photo-frame {
+            background: white;
+            padding: 10px 10px 14px 10px;
+            border-radius: 18px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+            border: 1px solid #f0f4f8;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .photo-frame:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 24px rgba(123, 174, 248, 0.2);
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 12px;
+            display: block;
+        }
+
+        .photo-caption {
+            font-family: 'Mali', cursive;
+            font-size: 0.88rem;
+            color: var(--heading-color);
+            text-align: center;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        /* Modal Lightbox for Photos */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.82);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-img {
+            max-width: 90%;
+            max-height: 80vh;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.active .modal-img {
+            transform: scale(1);
+        }
+
+        /* Card 6: Wish Box */
+        .card-interactive {
+            text-align: center;
+            background: #ffffff;
+            border: 2px dashed #bcdcfa;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #7baef8 0%, #4a8adb 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-family: 'Prompt', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(74, 138, 219, 0.35);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-box {
+            margin-top: 18px;
+            padding: 14px;
+            background: #f4f8fe;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            color: var(--dark-blue);
+            font-weight: 600;
+            min-height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .result-box.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Music Floating Control Button */
+        .music-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-blue);
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .music-btn.playing {
+            animation: pulseMusic 2s infinite;
+            color: #e53e3e;
+        }
+
+        @keyframes pulseTree {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes floatGarland {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(3deg); }
+        }
+
+        @keyframes pulseMusic {
+            0% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(229, 62, 62, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0); }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="petalCanvas"></canvas>
+
+    <button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="เปิด/ปิด เสียงเพลงบรรยากาศ">
+        <i class="fa-solid fa-heart" id="musicIcon"></i>
+    </button>
+
+    <div class="app-container">
+        
+        <!-- Card 1: Tree Hero -->
+        <div class="glass-card card-hero reveal" data-tilt>
+            <span class="hero-badge"><i class="fa-solid fa-sparkles"></i> Special Card</span>
+            <h1 class="hero-title">HAPPY MOTHER'S DAY</h1>
+            <div class="tree-wrapper" onclick="popHearts(event)">
+                <div class="tree-heart"></div>
+                <div class="tree-trunk"></div>
+            </div>
+            <div class="interactive-hint">
+                <i class="fa-solid fa-hand-pointer"></i> แตะที่ต้นไม้เพื่อส่งความรักให้คุณแม่
+            </div>
+        </div>
+
+        <!-- Card 2: Letter Card -->
+        <div class="glass-card card-letter reveal" data-tilt>
+            <div class="letter-header">
+                <div class="letter-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+                <h2 class="letter-title">ถึงแม่ คนที่หนูรักที่สุด 💖</h2>
+            </div>
+            <p class="letter-body">
+                ขอบคุณแม่ที่คอยดูแล คอยสนับสนุน และมอบความรักอันอบอุ่นที่ยิ่งใหญ่ให้หนูเสมอมา 
+                แม้ในวันที่เหนื่อยล้า แม่ก็ยังเป็นรอยยิ้มและกำลังใจสำคัญที่สุดในชีวิต 
+                ขอให้แม่มีความสุข สุขภาพแข็งแรง มีแต่รอยยิ้มสดใสในทุกๆ วันนะครับ/ค่ะ
+            </p>
+            <div class="letter-footer">รักแม่ที่สุดในโลก ❤️</div>
+        </div>
+
+        <!-- Card 3: Memory Grid -->
+        <div class="reveal">
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fa-solid fa-camera-retro" style="color: var(--dark-blue);"></i> Memory
+                </div>
+                <span style="font-size: 0.75rem; color: #a0aec0;">แตะเพื่อดูความทรงจำ</span>
+            </div>
+            <div class="memory-grid">
+                <div class="memory-card" onclick="triggerMemory(1, 'คุณแม่ดีเด่นอันดับ 1 ในใจเสมอ! 🥇')">
+                    <div class="memory-img-wrapper">🥇</div>
+                    <div class="memory-caption">แม่ดีเด่น #1</div>
+                </div>
+                <div class="memory-card" onclick="triggerMemory(2, 'Super Mom ซูเปอร์ฮีโร่ของลูก! 🦸‍♀️')">
+                    <div class="memory-img-wrapper">🦸‍♀️</div>
+                    <div class="memory-caption">Super Mom</div>
+                </div>
+                <div class="memory-card" onclick="triggerMemory(3, 'รักแม่ที่สุดในโลกเลยนะ! 🤟')">
+                    <div class="memory-img-wrapper">🤟</div>
+                    <div class="memory-caption">รักแม่ที่สุด</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4: Garland Card -->
+        <div class="glass-card card-garland reveal" data-tilt>
+            <div class="section-title" style="justify-content: center; margin-bottom: 8px;">
+                <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--dark-blue);"></i> มอบพวงมาลัยให้แม่
+            </div>
+            <div class="garland-wrapper" onclick="triggerGarlandEffect(event)">
+                <div class="garland-icon">💐</div>
+            </div>
+            <div class="garland-quote">"จับมือลูกไว้... แล้วก้าวเดินไปด้วยกัน"</div>
+        </div>
+
+        <!-- Card 5: Our Memories Photo Gallery (ส่วนรูปแนบใหม่) -->
+        <div class="glass-card card-gallery reveal" data-tilt>
+            <div class="section-title" style="justify-content: space-between; margin-bottom: 16px;">
+                <span style="display:flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-heart" style="color: #f8b3c9;"></i> ภาพความทรงจำของเรา
+                </span>
+                <label for="photoUpload" class="upload-btn-mini">
+                    <i class="fa-solid fa-camera"></i> เลือกรูปจริง
+                </label>
+                <input type="file" id="photoUpload" accept="image/*" multiple style="display: none;" onchange="handlePhotoUpload(event)">
+            </div>
+            
+            <div class="photo-gallery" id="photoGallery">
+                <div class="photo-frame" onclick="viewPhoto(this)">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80" alt="รูปคู่กับแม่ 1" class="gallery-img">
+                    <div class="photo-caption">ความสุขเล็กๆ ของพวกเรา ❤️</div>
+                </div>
+                <div class="photo-frame" onclick="viewPhoto(this)">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80" alt="รูปคู่กับแม่ 2" class="gallery-img">
+                    <div class="photo-caption">รอยยิ้มที่อบอุ่นที่สุด ✨</div>
+                </div>
+                <div class="photo-frame" onclick="viewPhoto(this)">
+                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80" alt="รูปคู่กับแม่ 3" class="gallery-img">
+                    <div class="photo-caption">รักและขอบคุณเสมอ 🌸</div>
+                </div>
+            </div>
+            <p style="font-size: 0.75rem; color: #a0aec0; text-align: center; margin-top: 12px;">
+                💡 *แตะที่ปุ่ม "เลือกรูปจริง" ด้านบนเพื่อเปลี่ยนเป็นรูปถ่ายของคุณกับแม่ได้นะ*
+            </p>
+        </div>
+
+        <!-- Card 6: Interactive Wish Generator -->
+        <div class="glass-card card-interactive reveal" data-tilt>
+            <div class="section-title" style="justify-content: center; margin-bottom: 6px;">
+                <i class="fa-solid fa-gift" style="color: var(--dark-blue);"></i> สุ่มของขวัญ / คำพรให้แม่
+            </div>
+            <p style="font-size: 0.82rem; color: #718096; margin-bottom: 16px;">กดปุ่มเพื่อลุ้นคำอธิษฐานสุดพิเศษสำหรับคุณแม่วันนี้</p>
+            <button class="action-btn" onclick="drawWish()">
+                <i class="fa-solid fa-dice"></i> สุ่มคำพรพิเศษ
+            </button>
+            <div class="result-box" id="wishResult">กดปุ่มเพื่อเริ่มสุ่มคำพร ✨</div>
+        </div>
+
+    </div>
+
+    <script>
+        /* Smooth Scroll Observer */
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        /* 3D Tilt */
+        document.querySelectorAll('[data-tilt]').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                card.style.transform = `perspective(1000px) rotateX(${-(y / rect.height) * 10}deg) rotateY(${(x / rect.width) * 10}deg) translateY(-4px)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+            });
+        });
+
+        /* Falling Petals */
+        const canvas = document.getElementById('petalCanvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        const petals = Array.from({ length: 22 }, () => ({
+            x: Math.random() * width,
+            y: Math.random() * height - height,
+            size: Math.random() * 12 + 8,
+            speedY: Math.random() * 1.2 + 0.8,
+            speedX: Math.random() * 0.8 - 0.4,
+            opacity: Math.random() * 0.5 + 0.3,
+            rotation: Math.random() * 360,
+            spin: Math.random() * 2 - 1,
+            color: ['#b2d3f9', '#d8e8fc', '#f8c2d4', '#e2edfd'][Math.floor(Math.random() * 4)]
+        }));
+
+        function animatePetals() {
+            ctx.clearRect(0, 0, width, height);
+            petals.forEach(p => {
+                p.y += p.speedY;
+                p.x += Math.sin(p.y * 0.01) + p.speedX;
+                p.rotation += p.spin;
+                if (p.y > height) { p.y = -20; p.x = Math.random() * width; }
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate((p.rotation * Math.PI) / 180);
+                ctx.globalAlpha = p.opacity;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.ellipse(0, 0, p.size, p.size / 2, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+            requestAnimationFrame(animatePetals);
+        }
+        animatePetals();
+
+        /* Audio & Sound Effects */
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playChimeSound() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const now = audioCtx.currentTime;
+            [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                gain.gain.setValueAtTime(0.15, now + idx * 0.08);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.5);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now + idx * 0.08);
+                osc.stop(now + idx * 0.08 + 0.5);
+            });
+        }
+
+        /* Upload & Preview Real Photos */
+        function handlePhotoUpload(event) {
+            const files = event.target.files;
+            if (!files || files.length === 0) return;
+
+            const gallery = document.getElementById('photoGallery');
+            gallery.innerHTML = '';
+
+            const captions = ["ความทรงจำแสนพิเศษ ❤️", "ยิ้มกว้างๆ ให้กันเสมอ ✨", "รักแม่ที่สุดในโลก 🌸", "ทุกช่วงเวลาที่มีค่า 💖"];
+
+            Array.from(files).slice(0, 5).forEach((file, idx) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const frame = document.createElement('div');
+                    frame.className = 'photo-frame';
+                    frame.onclick = function() { viewPhoto(this); };
+                    frame.innerHTML = `
+                        <img src="${e.target.result}" alt="รูปของฉันกับแม่ ${idx + 1}" class="gallery-img">
+                        <div class="photo-caption">${captions[idx % captions.length]}</div>
+                    `;
+                    gallery.appendChild(frame);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            playChimeSound();
+            confetti({ particleCount: 30, spread: 60, origin: { y: 0.7 }, colors: ['#7baef8', '#f8b3c9', '#ffffff'] });
+        }
+
+        /* Fullscreen View */
+        function viewPhoto(element) {
+            const imgSrc = element.querySelector('img').src;
+            let modal = document.getElementById('photoModal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'photoModal';
+                modal.className = 'modal-overlay';
+                modal.onclick = function() { modal.classList.remove('active'); };
+                modal.innerHTML = `<img src="" class="modal-img" id="modalImg">`;
+                document.body.appendChild(modal);
+            }
+            document.getElementById('modalImg').src = imgSrc;
+            modal.classList.add('active');
+            playChimeSound();
+        }
+
+        /* Confetti & Wishes */
+        function popHearts(e) {
+            playChimeSound();
+            confetti({ particleCount: 25, spread: 60, origin: { x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight } });
+        }
+
+        function triggerMemory(id, message) {
+            playChimeSound();
+            confetti({ particleCount: 35, origin: { y: 0.75 } });
+            const resultBox = document.getElementById('wishResult');
+            resultBox.innerText = message;
+            resultBox.classList.add('show');
+        }
+
+        function triggerGarlandEffect(e) {
+            playChimeSound();
+            confetti({ particleCount: 50, spread: 80, origin: { x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight } });
+        }
+
+        const wishes = [
+            "ขอให้แม่มีความสุข สดใส สุขภาพแข็งแรงตลอดปี ✨",
+            "ขอให้แม่มีแต่รอยยิ้มและเจอแต่เรื่องดีๆ ทุกวัน 😊",
+            "ขอให้แม่ถูกหวยรางวัลใหญ่ เงินทองไหลมาเทมา 💸",
+            "ขอให้แม่ได้พักผ่อนสบายๆ ท่องเที่ยวอย่างมีความสุข ✈️",
+            "ขอให้สุขภาพร่างกายแข็งแรง ไร้โรคภัยไข้เจ็บ 💪"
+        ];
+
+        function drawWish() {
+            playChimeSound();
+            const resultBox = document.getElementById('wishResult');
+            const randomIndex = Math.floor(Math.random() * wishes.length);
+            resultBox.classList.remove('show');
+            setTimeout(() => {
+                resultBox.innerText = wishes[randomIndex];
+                resultBox.classList.add('show');
+            }, 200);
+            confetti({ particleCount: 40, spread: 60, origin: { y: 0.8 } });
+        }
+
+        /* Music Synth Toggle */
+        let musicPlaying = false;
+        let ambientGain = null;
+        function toggleMusic() {
+            const btn = document.getElementById('musicBtn');
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            if (!musicPlaying) {
+                ambientGain = audioCtx.createGain();
+                ambientGain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                [261.63, 329.63, 392.00, 523.25].forEach(freq => {
+                    let osc = audioCtx.createOscillator();
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    osc.connect(ambientGain);
+                    osc.start();
+                });
+                ambientGain.connect(audioCtx.destination);
+                btn.classList.add('playing');
+                musicPlaying = true;
+            } else {
+                if (ambientGain) ambientGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.5);
+                btn.classList.remove('playing');
+                musicPlaying = false;
+            }
+        }
+    </script>
+</body>
+</html>
